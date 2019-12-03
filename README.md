@@ -46,11 +46,12 @@ sudo apt-get install -y php-cli php-dev
 sudo apt-get install -y ruby ruby-dev
 ```
 
-Now, when I try `./configure`, I see more options. Let's rebuild with all enabled:
+Now, when I try `./configure`, I see more options (`go java perl5 php python ruby`) Let's rebuild with all enabled:
 
 ```shell script
 ./configure
 make
+make install
 ```
 
 ## Build the Rust Library
@@ -65,3 +66,25 @@ If you are surprised by the size (2MB) of `librust_binding.so`, you can
 run `strip target/release/librust_binding.so` (on Linux) and trim it down to 10KB,
 which is all that is really there.
 
+## Build python bindings
+
+Running `make python` will compile the proper bindings. However, there seems to be some issue with the linkage.
+My current workaroud is:
+
+
+```shell script
+cd python
+LD_LIBRARY_PATH=`pwd` python
+>>> import rust_binding
+>>> rust_binding.sum(2, 4)
+6
+```
+
+## TODO
+
+* Get python build steps polished off
+* Handle strings in python
+* Try javascript
+* Organize project
+* Try Go
+* Try Java
