@@ -61,9 +61,33 @@ class _SwigNonDynamicMeta(type):
     __setattr__ = _swig_setattr_nondynamic_class_variable(type.__setattr__)
 
 
+class Foo(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    count = property(_rust_binding.Foo_count_get, _rust_binding.Foo_count_set)
+
+    def __init__(self):
+        _rust_binding.Foo_swiginit(self, _rust_binding.new_Foo())
+    __swig_destroy__ = _rust_binding.delete_Foo
+
+# Register Foo in _rust_binding:
+_rust_binding.Foo_swigregister(Foo)
+
+
+def concat(a, b):
+    return _rust_binding.concat(a, b)
 
 def count(word):
     return _rust_binding.count(word)
+
+def foo_multiply(foo, val):
+    return _rust_binding.foo_multiply(foo, val)
+
+def foo_new(count):
+    return _rust_binding.foo_new(count)
+
+def foo_update(ptr, val):
+    return _rust_binding.foo_update(ptr, val)
 
 def sum(a, b):
     return _rust_binding.sum(a, b)

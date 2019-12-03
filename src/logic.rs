@@ -7,8 +7,27 @@ pub fn count(word: &str) -> usize {
     word.len()
 }
 
-pub fn concat(a: &[u8], b: &[u8]) -> Vec<u8> {
+pub fn concat(a: &str, b: &str) -> String {
     [a, b].concat()
+}
+
+#[repr(C)]
+pub struct Foo {
+    pub count: i32
+}
+
+pub fn new_foo(count: i32) -> Foo {
+    Foo{count}
+}
+
+impl Foo {
+    pub fn multiply(&self, val: i32) -> i32 {
+        self.count * val
+    }
+
+    pub fn update(&mut self, count: i32) {
+        self.count = count
+    }
 }
 
 #[cfg(test)]
@@ -22,7 +41,7 @@ mod tests {
 
     #[test]
     fn check_concat() {
-        assert_eq!(concat(b"foo", b"bar"), b"foobar");
+        assert_eq!(concat("foo", "bar"), "foobar");
     }
 
     #[test]

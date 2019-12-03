@@ -103,10 +103,72 @@ make install-rust
 make python
 ```
 
+## Handling Structs
+
+It is not hard to expose structs over swig, just preface them with
+
+```rust
+#[repr(C)]
+#[derive(Copy,Clone)]
+pub struct Foo { // ...
+```
+
+You can now access the struct in the calling library and work with it. You can use it as an argument or return value for 
+functions as well. However... if you implement methods on it, they will not be exposed... 
+not even if you ask cbindgen to export "C++" style.
+
+I did find an article of someone who [demonstrates how to expose proper C++ types from rust](https://karroffel.gitlab.io/post/2019-05-15-rust/).
+It is a quite interesting an advanced technique, but in the end an utter headache on the FFI front in comparison to "C" exports
+(which are super painless). Here is an example of the code (from the above link):
+
+```rust
+// src/ffi/mod.rs
+use cpp::cpp;
+
+use crate::Adder;
+
+cpp!{{
+
+Adder::Adder() {
+    this->internal =
+        rust!(Adder_constructor [] -> *mut Adder as "void *" {
+            let b = Box::new(Adder::default());
+            Box::into_raw(b)
+        });
+}
+
+Adder::~Adder() {
+    rust!(Adder_destructor [internal: *mut Adder as "void *"] {
+        let _b = unsafe {
+            Box::from_raw(internal)
+        };
+    });
+}
+
+void Adder::add(int64_t value) {
+    rust!(Adder_add [
+        internal: &mut Adder as "void *",
+        value: i64 as "int64_t
+    ] {
+        internal.add(value);
+    });
+}
+
+int64_t Adder::tell() const {
+    return rust!(Adder_tell [
+        internal: &mut Adder as "void *"
+    ] -> i64 as "int64_t" {
+        internal.tell()
+    });
+}
+
+}}
+```
+
+Given that, I will stick with the standard C api and pass around structs and functions that manipulate them.
+
 ## TODO
 
-* Get python build steps polished off
-* Handle strings in python
 * Try javascript
 * Organize project
 * Try Go
