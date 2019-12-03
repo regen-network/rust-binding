@@ -117,6 +117,24 @@ You can now access the struct in the calling library and work with it. You can u
 functions as well. However... if you implement methods on it, they will not be exposed... 
 not even if you ask cbindgen to export "C++" style.
 
+## Handling ints
+
+When exposing any rust int types (i32, u64, etc), swig was happy, but python would complain
+about unknown types. The first approach was to cast the `extern "C"` functions so they only
+expose `libc::int_t`. However, once we exposed structs, the accessors would get `i32` and
+complain hard when trying to access the struct directly. 
+
+Adding `%include "stdint.i"` to the top of `rust_bindings.i` will allow swig to expose all the
+various rust int types in one standard type that the python runtime can interact with. I assume
+this will also work with other languages :cross_fingers:
+
+## Exposing C++ style methods
+
+[Swig does have nice support for C++ methods](http://swig.org/Doc4.0/Python.html#Python_nn20).
+However, that requires you to actually have C++ methods. After spending some time trying
+to get `cbindgen` to expose methods, I dug in deeper to see who had managed to expose
+C++ method type interfaces from rust, such that they can be used by a caller.
+
 I did find an article of someone who [demonstrates how to expose proper C++ types from rust](https://karroffel.gitlab.io/post/2019-05-15-rust/).
 It is a quite interesting an advanced technique, but in the end an utter headache on the FFI front in comparison to "C" exports
 (which are super painless). Here is an example of the code (from the above link):
@@ -166,6 +184,7 @@ int64_t Adder::tell() const {
 ```
 
 Given that, I will stick with the standard C api and pass around structs and functions that manipulate them.
+
 
 ## TODO
 

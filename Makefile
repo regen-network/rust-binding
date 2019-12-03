@@ -1,7 +1,17 @@
 .PHONY: python python-old
 
-# TODO: switch so/dylib if linux or osx
-DLL_EXT := so
+DLL_EXT = ""
+ifeq ($(OS),Windows_NT)
+	DLL_EXT = dll
+else
+	UNAME_S := $(shell uname -s)
+	ifeq ($(UNAME_S),Linux)
+		DLL_EXT = so
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		DLL_EXT = dylib
+	endif
+endif
 
 install-rust:
 	cargo build --release
