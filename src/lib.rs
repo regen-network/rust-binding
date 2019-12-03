@@ -1,38 +1,38 @@
 mod logic;
 
 use std::ffi::{CStr, CString};
-use libc::{c_char, c_int};
+use libc::{c_char};
 
 // Note that for python we need to use c_int rather than i32/i64
 #[no_mangle]
-pub extern "C" fn foo_new(count: c_int) -> logic::Foo {
-    logic::new_foo(count as i32)
+pub extern "C" fn foo_new(count: i32) -> logic::Foo {
+    logic::new_foo(count)
 }
 
 #[no_mangle]
-pub extern "C" fn foo_multiply(foo: logic::Foo, val: c_int) -> c_int {
-    foo.multiply(val as i32) as c_int
+pub extern "C" fn foo_multiply(foo: logic::Foo, val: i32) -> i32 {
+    foo.multiply(val)
 }
 
 #[no_mangle]
-pub extern "C" fn foo_update(ptr: Option<&mut logic::Foo>, val: c_int) {
+pub extern "C" fn foo_update(ptr: Option<&mut logic::Foo>, val: i32) {
     match ptr {
-        Some(foo) => foo.update(val as i32),
+        Some(foo) => foo.update(val),
         None => {},
     };
 }
 
 #[no_mangle]
-pub extern "C" fn sum(a: c_int, b: c_int) -> c_int {
-    logic::sum(a as u32, b as u32) as i32
+pub extern "C" fn sum(a: u32, b: u32) -> u32 {
+    logic::sum(a, b)
 }
 
 #[no_mangle]
-pub extern "C" fn count(word: *const c_char) -> c_int {
+pub extern "C" fn count(word: *const c_char) -> usize {
     let cstr = unsafe { CStr::from_ptr(word) };
     // TODO: never panic in ffi calls
     let words = cstr.to_str().unwrap();
-    logic::count(words) as c_int
+    logic::count(words)
 }
 
 // TODO: note this creates a memory leak, we need a cleanup function
