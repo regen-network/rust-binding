@@ -62,6 +62,9 @@ class _SwigNonDynamicMeta(type):
 
 
 
+def count(word):
+    return _rust_binding.count(word)
+
 def sum(a, b):
     return _rust_binding.sum(a, b)
 

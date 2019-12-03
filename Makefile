@@ -1,9 +1,12 @@
 .PHONY: python python-old
 
+# TODO: switch so/dylib if linux or osx
+DLL_EXT := so
+
 install-rust:
 	cargo build --release
 	# install it as a system package
-	sudo cp target/release/librust_binding.{so,dylib} /usr/local/lib
+	sudo cp target/release/librust_binding.$(DLL_EXT) /usr/local/lib
 	sudo ldconfig
 
 swig-python:

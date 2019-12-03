@@ -3,10 +3,13 @@ pub fn sum(a: u32, b: u32) -> u32 {
     a + b
 }
 
+pub fn count(word: &str) -> usize {
+    word.len()
+}
+
 pub fn concat(a: &[u8], b: &[u8]) -> Vec<u8> {
     [a, b].concat()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -22,4 +25,8 @@ mod tests {
         assert_eq!(concat(b"foo", b"bar"), b"foobar");
     }
 
+    #[test]
+    fn check_count() {
+        assert_eq!(count("one time"), 8);
+    }
 }
