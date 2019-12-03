@@ -1,3 +1,13 @@
 /target
 **/*.rs.bk
 Cargo.lock
+
+# don't commit dynamic libs (make them)
+*.so
+*.dll
+*.dylib
+
+# don't commit header file (use build.rs)
+# or swig intermediate files
+*.h
+*.c
