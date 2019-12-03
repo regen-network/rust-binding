@@ -71,13 +71,36 @@ which is all that is really there.
 Running `make python` will compile the proper bindings. However, there seems to be some issue with the linkage.
 My current workaroud is:
 
-
 ```shell script
 cd python
 LD_LIBRARY_PATH=`pwd` python
 >>> import rust_binding
 >>> rust_binding.sum(2, 4)
 6
+```
+
+This is a [known problem](https://stackoverflow.com/questions/36827871/cython-unable-to-find-shared-object-file) 
+and either setting `LD_LIBARY_PATH` or trying  [setup.py install](https://github.com/gipit/gippy/issues/123)
+seem to be the only options. Let's try the second.
+
+```shell script
+virtualenv ~/foo
+source ~/foo/bin/activate
+cd bind/python
+python setup.py install
+```
+
+Same issue :(
+
+Current approach is to copy the *.so file to `/usr/local/lib` and call `ldconfig`. Basically, 
+installing our rust library on the system. Which I guess is okay? After that all the swig bindings just work
+as they can find our new "system" library. This is the same approach as libpng or libgzip, or many others.
+
+Now this works:
+
+```shell script
+make install-rust
+make python
 ```
 
 ## TODO

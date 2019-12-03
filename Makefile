@@ -1,16 +1,18 @@
 .PHONY: python python-old
 
-rust:
+install-rust:
 	cargo build --release
-	cp target/release/librust_binding.so deps
+	# install it as a system package
+	sudo cp target/release/librust_binding.{so,dylib} /usr/local/lib
+	sudo ldconfig
 
-swig-python: rust
+swig-python:
 	mkdir -p bind/python
 	cp deps/* bind/python
 	swig -python -outdir bind/python bind/python/rust_binding.i
 
-python:
-
-python-old:
-	gcc -fPIC -Wno-register -Wall -c -o python/rust_binding_wrap.o python/rust_binding_wrap.c -Ipython/ `python2-config --includes`
-	gcc -Wno-deprecated-register -shared -o python/_rust_binding.so python/rust_binding_wrap.o -Lpython/ -lrust_binding -lpython
+python: swig-python
+	cd bind/python && python setup.py build_ext --inplace
+	@ echo -e "\nRunning example script:\n"
+	cd bind/python && python example.py
+# 	cd bind/python && python setup.py install

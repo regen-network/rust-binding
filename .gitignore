@@ -11,3 +11,7 @@ Cargo.lock
 # or swig intermediate files
 *.h
 *.c
+
+# python
+build
+*.pyc
