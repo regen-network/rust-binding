@@ -5,9 +5,9 @@
 %rename("%(lowercamelcase)s") "";
 // %rename("NewFoo") "foo_new";
 
-%module rust_binding
+%module rust_ffi
 %{
-#include "rust_binding.h"
+#include "rust_ffi.h"
 %}
 
-%include "rust_binding.h"
+%include "rust_ffi.h"

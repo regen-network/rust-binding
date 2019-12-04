@@ -1,3 +1,3 @@
-module sample.com/rust_binding/go
+module sample.com/rust_ffi/go
 
 go 1.13

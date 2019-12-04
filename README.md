@@ -7,6 +7,13 @@ Links:
 * [Swig Docs](http://swig.org/Doc4.0/Sections.html#Sections)
   * [Python](http://swig.org/Doc4.0/Python.html#Python)
 
+## Organization
+
+This is an attempt to pull out the ffi stuff into a sub-crate, and wasm into another.
+Note the `cbindgen.toml` file in `lib/rust_ffi`. The `parse_deps = true` directive 
+is essential to be able to expose headers for re-exported structs.
+
+Nice example to refer to for this organization approach: https://github.com/Ortham/esplugin/tree/master/ffi
 
 ## Install Swig
 
@@ -185,10 +192,20 @@ int64_t Adder::tell() const {
 
 Given that, I will stick with the standard C api and pass around structs and functions that manipulate them.
 
+## Passing function pointers
+
+There was also discussion on how to pass function pointer from the target language (eg. python/go)
+into the rust library. There is a very nice stack overflow answer about passing one function
+*defined in the rust lib* to another function *also defined in the C header*.
+
+https://stackoverflow.com/questions/22923696/how-to-wrap-a-c-function-which-takes-in-a-function-pointer-in-python-using-swi
+
+Note it is about returning using one function defined in C as an argument to another function defined in C, which ends up
+requiring a few swig directives to get it to work. No talk of passing a pure 
+python function into the C code.
 
 ## TODO
 
 * Try javascript
 * Organize project
-* Try Go
 * Try Java

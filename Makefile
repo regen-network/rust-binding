@@ -21,15 +21,17 @@ endif
 ifeq ($(SYS),linux)
 
 install-rust:
-	cargo build --release
-	sudo cp target/release/librust_binding.$(DLL_EXT) /usr/local/lib
+	mkdir -p deps
+	cd lib/rust_ffi && cargo build --release
+	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 	sudo ldconfig
 
 else ifeq ($(SYS),macos)
 
 install-rust:
-	cargo build --release
-	sudo cp target/release/librust_binding.$(DLL_EXT) /usr/local/lib
+	mkdir -p deps
+	cd lib/rust_ffi && cargo build --release
+	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 
 else
 
@@ -41,19 +43,19 @@ endif
 
 ensure-%:
 	mkdir -p bind/$*
-	cp deps/* bind/$*
+	cp lib/rust_ffi/deps/* bind/$*
 
 python: ensure-python
-	swig -python -outdir bind/python bind/python/rust_binding.i
+	swig -python -outdir bind/python bind/python/rust_ffi.i
 	cd bind/python && python setup.py build_ext --inplace
 # 	cd bind/python && python setup.py install
 	@ echo -e "\nRunning example script:\n"
 	cd bind/python && python example.py
 
 python3: ensure-python3
-	swig -python -outdir bind/python3 bind/python3/rust_binding.i
+	swig -python -outdir bind/python3 bind/python3/rust_ffi.i
 	cd bind/python3 && python3 setup.py build_ext --inplace && python3 example.py
 
 go: ensure-go
-	swig -go -intgosize 64 -outdir bind/go bind/go/rust_binding.i
+	swig -go -intgosize 64 -outdir bind/go bind/go/rust_ffi.i
 	GO111MODULE=on cd bind/go && go run ./example

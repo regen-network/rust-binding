@@ -1,47 +1,51 @@
-mod logic;
-
-use std::ffi::{CStr, CString};
-use libc::{c_char};
-
-// Note that for python we need to use c_int rather than i32/i64
-#[no_mangle]
-pub extern "C" fn foo_new(count: i32) -> logic::Foo {
-    logic::new_foo(count)
+// logic contains the actual rust code we want to test, not any bindings
+pub fn sum(a: u32, b: u32) -> u32 {
+    a + b
 }
 
-#[no_mangle]
-pub extern "C" fn foo_multiply(foo: logic::Foo, val: i32) -> i32 {
-    foo.multiply(val)
+pub fn count(word: &str) -> usize {
+    word.len()
 }
 
-#[no_mangle]
-pub extern "C" fn foo_update(ptr: Option<&mut logic::Foo>, val: i32) {
-    match ptr {
-        Some(foo) => foo.update(val),
-        None => {},
-    };
+pub fn concat(a: &str, b: &str) -> String {
+    [a, b].concat()
 }
 
-#[no_mangle]
-pub extern "C" fn sum(a: u32, b: u32) -> u32 {
-    logic::sum(a, b)
+#[repr(C)]
+pub struct Foo {
+    pub count: i32
 }
 
-#[no_mangle]
-pub extern "C" fn count(word: *const c_char) -> usize {
-    let cstr = unsafe { CStr::from_ptr(word) };
-    // TODO: never panic in ffi calls
-    let words = cstr.to_str().unwrap();
-    logic::count(words)
+pub fn new_foo(count: i32) -> Foo {
+    Foo{count}
 }
 
-// TODO: note this creates a memory leak, we need a cleanup function
-// how to do this without putting the burden on the other side (ideally auto-freed via swagger)?
-#[no_mangle]
-pub extern "C" fn concat(a: *const c_char, b: *const c_char) -> *mut c_char {
-    // TODO: never panic in ffi calls
-    let a = unsafe { CStr::from_ptr(a) }.to_str().unwrap();
-    let b = unsafe { CStr::from_ptr(b) }.to_str().unwrap();
-    let res = logic::concat(a, b);
-    CString::new(res).unwrap().into_raw()
+impl Foo {
+    pub fn multiply(&self, val: i32) -> i32 {
+        self.count * val
+    }
+
+    pub fn update(&mut self, count: i32) {
+        self.count = count
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn check_sum() {
+        assert_eq!(sum(2, 2), 4);
+    }
+
+    #[test]
+    fn check_concat() {
+        assert_eq!(concat("foo", "bar"), "foobar");
+    }
+
+    #[test]
+    fn check_count() {
+        assert_eq!(count("one time"), 8);
+    }
 }

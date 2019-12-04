@@ -15,7 +15,7 @@ Cargo.lock
 # python auto-gen
 build
 *.pyc
-rust_binding.py
+rust_ffi.py
 
 # go auto-gen
-rust_binding.go
+rust_ffi.go
