@@ -6,6 +6,7 @@ pub extern "C" fn foo_new(count: i32) -> rust_binding::Foo {
     rust_binding::new_foo(count)
 }
 
+
 #[no_mangle]
 pub extern "C" fn foo_multiply(foo: rust_binding::Foo, val: i32) -> i32 {
     foo.multiply(val)

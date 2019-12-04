@@ -7,6 +7,13 @@ Links:
 * [Swig Docs](http://swig.org/Doc4.0/Sections.html#Sections)
   * [Python](http://swig.org/Doc4.0/Python.html#Python)
 
+## Organization
+
+This is an attempt to pull out the ffi stuff into a sub-crate, and wasm into another.
+Note the `cbindgen.toml` file in `lib/rust_ffi`. The `parse_deps = true` directive 
+is essential to be able to expose headers for re-exported structs.
+
+Nice example to refer to for this organization approach: https://github.com/Ortham/esplugin/tree/master/ffi
 
 ## Install Swig
 
