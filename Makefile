@@ -62,4 +62,7 @@ go: ensure-go
 
 javascript:
 	mkdir -p bind/javascript
+	# note we compile for nodejs target for easier testing as a demo project
+	# you can remove this to compile for default browser, then need different test setup
 	cd lib/rust-wasm && wasm-pack build --target nodejs --out-dir ../../bind/javascript/wasm
+	cd bind/javascript && node example.js
