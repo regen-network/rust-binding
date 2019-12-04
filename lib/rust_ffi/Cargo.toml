@@ -1,0 +1,15 @@
+[package]
+name = "rust_ffi"
+version = "0.1.0"
+authors = ["Ethan Frey <ethanfrey@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rust-binding = { path = "../..", version = "0.1.0" }
+libc = "0.2"
+
+[build-dependencies]
+cbindgen = "0.6"

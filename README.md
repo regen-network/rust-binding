@@ -185,10 +185,20 @@ int64_t Adder::tell() const {
 
 Given that, I will stick with the standard C api and pass around structs and functions that manipulate them.
 
+## Passing function pointers
+
+There was also discussion on how to pass function pointer from the target language (eg. python/go)
+into the rust library. There is a very nice stack overflow answer about passing one function
+*defined in the rust lib* to another function *also defined in the C header*.
+
+https://stackoverflow.com/questions/22923696/how-to-wrap-a-c-function-which-takes-in-a-function-pointer-in-python-using-swi
+
+Note it is about returning using one function defined in C as an argument to another function defined in C, which ends up
+requiring a few swig directives to get it to work. No talk of passing a pure 
+python function into the C code.
 
 ## TODO
 
 * Try javascript
 * Organize project
-* Try Go
 * Try Java

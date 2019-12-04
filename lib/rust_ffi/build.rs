@@ -8,5 +8,5 @@ fn main() {
     config.language = cbindgen::Language::C;
     cbindgen::generate_with_config(&crate_dir, config)
         .unwrap()
-        .write_to_file("deps/rust_binding.h");
+        .write_to_file("deps/rust_ffi.h");
 }
