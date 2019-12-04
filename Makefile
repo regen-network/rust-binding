@@ -21,6 +21,7 @@ endif
 ifeq ($(SYS),linux)
 
 install-rust:
+	mkdir -p deps
 	cd lib/rust_ffi && cargo build --release
 	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 	sudo ldconfig
@@ -28,6 +29,7 @@ install-rust:
 else ifeq ($(SYS),macos)
 
 install-rust:
+	mkdir -p deps
 	cd lib/rust_ffi && cargo build --release
 	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 
@@ -41,7 +43,7 @@ endif
 
 ensure-%:
 	mkdir -p bind/$*
-	cp deps/* bind/$*
+	cp lib/rust_ffi/deps/* bind/$*
 
 python: ensure-python
 	swig -python -outdir bind/python bind/python/rust_ffi.i

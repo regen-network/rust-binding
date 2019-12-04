@@ -1,0 +1,16 @@
+language = "C"
+
+[parse]
+# Whether to parse dependent crates and include their types in the output
+# default: false
+parse_deps = true
+
+include = ["rust-binding", "rust_binding"]
+
+[parse.expand]
+
+crates = ["rust-binding", "rust_binding"]
+
+[export]
+
+include = ["Foo"]

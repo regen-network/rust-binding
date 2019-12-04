@@ -9,9 +9,9 @@ from os import getcwd
 from distutils.core import setup, Extension
 
 
-rust_module = Extension('_rust_binding',
-                           sources=['rust_binding_wrap.c'],
-                           libraries=['rust_binding'],
+rust_module = Extension('_rust_ffi',
+                           sources=['rust_ffi_wrap.c'],
+                           libraries=['rust_ffi'],
                            )
 
 setup (name = 'rust',
