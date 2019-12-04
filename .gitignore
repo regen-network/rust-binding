@@ -16,3 +16,6 @@ Cargo.lock
 build
 *.pyc
 rust_binding.py
+
+# go auto-gen
+rust_binding.go

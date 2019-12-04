@@ -1,4 +1,4 @@
-.PHONY: python python-old
+.PHONY: python python3 go
 
 # detect os and dll extension
 DLL_EXT = ""
@@ -53,3 +53,7 @@ python: ensure-python
 python3: ensure-python3
 	swig -python -outdir bind/python3 bind/python3/rust_binding.i
 	cd bind/python3 && python3 setup.py build_ext --inplace && python3 example.py
+
+go: ensure-go
+	swig -go -intgosize 64 -outdir bind/go bind/go/rust_binding.i
+	GO111MODULE=on cd bind/go && go run ./example
