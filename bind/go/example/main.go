@@ -17,11 +17,17 @@ func main() {
 	concat := rust_binding.Concat("hello ", "world")
 	fmt.Printf("Concat('hello ', 'world'): %s\n", concat)
 
-	foo := rust_binding.Foo_new(17)
+	// one way to construct it (auto-gen)
+	foo := rust_binding.NewFoo()
+	foo.SetCount(17)
+
+	// more explicit (from foo_new rust call)
+	foo = rust_binding.FooNew(17)
+
 	fmt.Printf("multiplier: %d\n", foo.GetCount())
-	fmt.Printf("foo_multiply(5): %d\n", rust_binding.Foo_multiply(foo, 5))
+	fmt.Printf("foo_multiply(5): %d\n", rust_binding.FooMultiply(foo, 5))
 
 	foo.SetCount(12)
 	fmt.Printf("multiplier: %d\n", foo.GetCount())
-	fmt.Printf("foo_multiply(6): %d\n", rust_binding.Foo_multiply(foo, 6))
+	fmt.Printf("foo_multiply(6): %d\n", rust_binding.FooMultiply(foo, 6))
 }
