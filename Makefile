@@ -22,7 +22,7 @@ ifeq ($(SYS),linux)
 
 install-rust:
 	mkdir -p deps
-	cd lib/rust_ffi && cargo build --release
+	cd lib/rust-ffi && cargo build --release
 	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 	sudo ldconfig
 
@@ -30,7 +30,7 @@ else ifeq ($(SYS),macos)
 
 install-rust:
 	mkdir -p deps
-	cd lib/rust_ffi && cargo build --release
+	cd lib/rust-ffi && cargo build --release
 	sudo cp target/release/librust_ffi.$(DLL_EXT) /usr/local/lib
 
 else
@@ -43,7 +43,7 @@ endif
 
 ensure-%:
 	mkdir -p bind/$*
-	cp lib/rust_ffi/deps/* bind/$*
+	cp lib/rust-ffi/deps/* bind/$*
 
 python: ensure-python
 	swig -python -outdir bind/python bind/python/rust_ffi.i
@@ -59,3 +59,10 @@ python3: ensure-python3
 go: ensure-go
 	swig -go -intgosize 64 -outdir bind/go bind/go/rust_ffi.i
 	GO111MODULE=on cd bind/go && go run ./example
+
+javascript:
+	mkdir -p bind/javascript
+	# note we compile for nodejs target for easier testing as a demo project
+	# you can remove this to compile for default browser, then need different test setup
+	cd lib/rust-wasm && wasm-pack build --target nodejs --out-dir ../../bind/javascript/wasm
+	cd bind/javascript && node example.js
