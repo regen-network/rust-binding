@@ -19,3 +19,6 @@ rust_ffi.py
 
 # go auto-gen
 rust_ffi.go
+
+# wasm auto-gen
+bind/javascript/wasm

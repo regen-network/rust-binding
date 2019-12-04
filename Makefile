@@ -59,3 +59,7 @@ python3: ensure-python3
 go: ensure-go
 	swig -go -intgosize 64 -outdir bind/go bind/go/rust_ffi.i
 	GO111MODULE=on cd bind/go && go run ./example
+
+javascript:
+	mkdir -p bind/javascript
+	cd lib/rust-wasm && wasm-pack build --target nodejs --out-dir ../../bind/javascript/wasm

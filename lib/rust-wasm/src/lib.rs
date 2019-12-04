@@ -9,11 +9,16 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
-extern {
-    fn alert(s: &str);
+pub fn sum(a: u32, b: u32) -> u32{
+    rust_binding::sum(a, b)
 }
 
 #[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, rust-wasm!");
+pub fn count(word: &str) -> usize{
+    rust_binding::count(word)
+}
+
+#[wasm_bindgen]
+pub fn concat(a: &str, b: &str) -> String {
+    rust_binding::concat(a, b)
 }
